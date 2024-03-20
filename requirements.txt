@@ -13,7 +13,6 @@ click==8.1.7
 colorama==0.4.6
 copier==9.1.1
 crashtest==0.4.1
-dash==2.14.2
 dash-core-components==2.0.0
 dash-html-components==2.0.0
 dash-table==5.0.0
@@ -49,6 +48,7 @@ packaging==23.2
 pandas==2.1.4
 pathspec==0.12.1
 pexpect==4.9.0
+pip-autoremove==0.10.0
 pkginfo==1.10.0
 platformdirs==4.2.0
 plotly==5.18.0
@@ -67,8 +67,6 @@ pyproject_hooks==1.0.0
 python-dateutil==2.8.2
 python-dotenv==1.0.1
 pytz==2023.3.post1
-pywin32==306
-pywin32-ctypes==0.2.2
 PyYAML==6.0.1
 pyyaml-include==1.3.2
 questionary==2.0.1
