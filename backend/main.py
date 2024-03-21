@@ -23,15 +23,12 @@ load_dotenv()
 
 
 app = FastAPI(
-    title="Finantial-Api",
-    generate_unique_id_function=custom_generate_unique_id
+    title="Finantial-Api", generate_unique_id_function=custom_generate_unique_id
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "*"
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

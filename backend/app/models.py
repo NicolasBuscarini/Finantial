@@ -5,7 +5,7 @@ Base = declarative_base()
 
 
 class CreditCard(Base):
-    __tablename__ = 'credit_cards'
+    __tablename__ = "credit_cards"
 
     id = Column(Integer, primary_key=True, index=True)
     card_number = Column(String(16), unique=True, index=True, nullable=False)
