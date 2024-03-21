@@ -1,4 +1,4 @@
 {
     "tabby.api.endpoint": "",
-    "python.analysis.typeCheckingMode": "basic"
+    "python.analysis.typeCheckingMode": "off"
 }
