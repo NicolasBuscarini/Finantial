@@ -48,3 +48,4 @@ def delete_credit_card(credit_card_id: int, db: Session = Depends(get_db)):
     db.delete(credit_card)
     db.commit()
     return {"message": "Credit card deleted successfully"}
+
