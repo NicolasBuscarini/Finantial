@@ -1,11 +1,12 @@
 from decimal import Decimal
 import yfinance as yf
 
+
 class YahooFinanceService:
     def get_ticker_info(self, ticker_symbol: str):
         return yf.Ticker(ticker_symbol)
 
-    def get_currency_code(self, ticker) -> str :
+    def get_currency_code(self, ticker) -> str:
         return str(ticker.basic_info.get('currency'))
 
     def get_history(self, ticker, start_date):

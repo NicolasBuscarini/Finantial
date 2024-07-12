@@ -46,7 +46,7 @@ def get_rend(stock_transaction_id: int, db: Session = Depends(get_db)):
 
     stock_transaction = db.query(StockTransaction).filter(
         StockTransaction.id == stock_transaction_id).first()
-    
+
     if stock_transaction is None:
         raise HTTPException(
             status_code=404, detail="Stock transaction not found")

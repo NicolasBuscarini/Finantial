@@ -4,6 +4,8 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 # This class likely represents a credit card entity that inherits from a base class.
+
+
 class CreditCard(Base):
     """
     Represents a credit card entity.
@@ -32,6 +34,8 @@ class CreditCard(Base):
 
 # The `StockTransaction` class represents a stock transaction with attributes such as ticker symbol,
 # transaction type (BUY or SELL), quantity, price per unit, and transaction date.
+
+
 class StockTransaction(Base):
     """
     Represents a stock transaction.

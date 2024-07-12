@@ -47,7 +47,8 @@ def setup_database():
             db.execute(text("SELECT 1"))
         logger.info("Database connection successful.")
 
-        # Create all database tables defined in SQLAlchemy models using the `engine` database engine.
+        # Create all database tables defined in SQLAlchemy models using the
+        # `engine` database engine.
         Base.metadata.create_all(bind=engine)
     except SQLAlchemyError as e:
         logger.error(f"Error connecting to the database: {e}")

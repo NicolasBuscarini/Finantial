@@ -10,7 +10,8 @@ from typing import Optional, TextIO
 class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
     stream: Optional[TextIO] = None
 
-    def __init__(self, filename, when='h', interval=1, backupCount=0, encoding=None, delay=False, utc=False, atTime=None):
+    def __init__(self, filename, when='h', interval=1, backupCount=0,
+                 encoding=None, delay=False, utc=False, atTime=None):
         super().__init__(filename, when, interval, backupCount, encoding, delay, utc, atTime)
 
     def doRollover(self):

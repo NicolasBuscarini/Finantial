@@ -57,7 +57,8 @@ def get_investment_details(stock_transaction, yahoo_finance_service):
 
 
 @router.get("/by_transaction_id", response_model=InvestmentDetailResponse)
-def get_dividends_paid_by_transaction_id(stock_transaction_id: int = Query(..., description="Stock transaction ID"), db: Session = Depends(get_db)):
+def get_dividends_paid_by_transaction_id(
+        stock_transaction_id: int = Query(..., description="Stock transaction ID"), db: Session = Depends(get_db)):
     stock_transaction_service = StockTransactionService(db)
     yahoo_finance_service = YahooFinanceService()
 
@@ -75,7 +76,8 @@ def get_dividends_paid_by_transaction_id(stock_transaction_id: int = Query(..., 
 
 
 @router.get("/by_symbol", response_model=InvestmentDetailResponse)
-def get_dividends_paid_by_symbol(stock_transaction_symbol: str = Query(..., description="Stock transaction symbol"), db: Session = Depends(get_db)):
+def get_dividends_paid_by_symbol(stock_transaction_symbol: str = Query(...,
+                                 description="Stock transaction symbol"), db: Session = Depends(get_db)):
     stock_transaction_service = StockTransactionService(db)
     yahoo_finance_service = YahooFinanceService()
 

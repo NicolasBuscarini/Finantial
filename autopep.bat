@@ -1,0 +1,1 @@
+Get-ChildItem -Path .\app\ -Recurse -Filter *.py | ForEach-Object { python -m autopep8 --in-place --aggressive --max-line-length 100  $_.FullName }

@@ -10,7 +10,8 @@ class StockTransactionService:
     def __init__(self, db: Session):
         self.db = db
 
-    def create_stock_transaction(self, stock_transaction_data: StockTransactionRequest) -> StockTransactionResponse:
+    def create_stock_transaction(
+            self, stock_transaction_data: StockTransactionRequest) -> StockTransactionResponse:
         ticker_symbol_with_suffix = stock_transaction_data.ticker_symbol.upper() + \
             stock_transaction_data.ticker_suffix.upper()
 
@@ -24,7 +25,8 @@ class StockTransactionService:
         self.db.refresh(stock_transaction)
         return format_transaction_response(stock_transaction)
 
-    def create_stock_transactions(self, stock_transactions_data: List[StockTransactionRequest]) -> List[StockTransactionResponse]:
+    def create_stock_transactions(
+            self, stock_transactions_data: List[StockTransactionRequest]) -> List[StockTransactionResponse]:
         transactions = []
         for transaction_data in stock_transactions_data:
             transaction = self.create_stock_transaction(transaction_data)
@@ -53,7 +55,8 @@ class StockTransactionService:
                 status_code=404, detail=f"No stock transactions found for symbol {ticker_symbol}")
         return stock_transactions
 
-    def list_stock_transactions(self, page: int, per_page: int, sort_by: str, order: str) -> List[StockTransactionResponse]:
+    def list_stock_transactions(self, page: int, per_page: int, sort_by: str,
+                                order: str) -> List[StockTransactionResponse]:
         # Determine sort order
         if order == "asc":
             sort_order = StockTransaction.__dict__[sort_by].asc()
@@ -77,7 +80,8 @@ class StockTransactionService:
 
         return transactions
 
-    def update_stock_transaction(self, stock_transaction_id: int, stock_transaction_data: Dict) -> StockTransactionResponse:
+    def update_stock_transaction(self, stock_transaction_id: int,
+                                 stock_transaction_data: Dict) -> StockTransactionResponse:
         stock_transaction = self.db.query(StockTransaction).filter(
             StockTransaction.id == stock_transaction_id).first()
         if stock_transaction is None:
