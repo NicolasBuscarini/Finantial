@@ -10,7 +10,9 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x'
+        python-version: '3.11'
+    - name: Install dependencies
+      run: python -m pip install -r requirements.txt
     - name: Install pylint
       run: pip install pylint
     - name: Lint Python files in /app directory
