@@ -16,7 +16,7 @@ def get_investment_details(stock_transaction, yahoo_finance_service):
         stock_transaction.ticker_symbol)
     currency_code = yahoo_finance_service.get_currency_code(ticker)
     history = yahoo_finance_service.get_history(
-        ticker, start_date=stock_transaction.transaction_date.strftime("%Y-%m-%d"))
+        ticker, start_date=stock_transaction.transaction_date)
 
     dividends_paid = yahoo_finance_service.calculate_dividends_paid(
         stock_transaction.quantity, history)
@@ -82,24 +82,24 @@ def get_dividends_paid_by_symbol(stock_transaction_symbol: str = Query(...,
                 status_code=404, detail=f"No stock transactions found for symbol {stock_transaction_symbol}")
 
         total_dividends_paid = Decimal(0)
-        total_quantity = Decimal(0)
+        total_quantity: int = 0
         total_cost = Decimal(0)
 
         for stock_transaction in stock_transactions:
             history = yahoo_finance_service.get_history(yahoo_finance_service.get_ticker_info(
-                stock_transaction_symbol), start_date=stock_transaction.transaction_date.strftime("%Y-%m-%d"))
+                stock_transaction_symbol), start_date=stock_transaction.transaction_date.__str__())
             quantity = int(str(stock_transaction.quantity))
-            price_per_unit = int(str(stock_transaction.price_per_unit))
+            price_per_unit = stock_transaction.price_per_unit.real
             dividends_paid = yahoo_finance_service.calculate_dividends_paid(
                 quantity, history)
             total_dividends_paid += dividends_paid
             total_quantity += quantity
             total_cost += quantity * price_per_unit
 
-        average_price_bought = total_cost / total_quantity
+        average_price_bought = Decimal(total_cost / total_quantity)
         current_price = yahoo_finance_service.get_current_price(
             yahoo_finance_service.get_ticker_info(stock_transaction_symbol))
-        price_variation = current_price - average_price_bought
+        price_variation = current_price - average_price_bought.real
         profitability_total = total_dividends_paid + \
             (price_variation * total_quantity)
         profitability_stock = price_variation * total_quantity
@@ -125,6 +125,6 @@ def get_dividends_paid_by_symbol(stock_transaction_symbol: str = Query(...,
         return response
 
     except Exception as e:
-        logger.error(f"Failed to get dividends paid by symbol: {e}")
+        logger.error(f"Failed to get dividends paid by symbol: {e.__str__()}")
         raise HTTPException(
             status_code=500, detail="Failed to process request")

@@ -17,15 +17,13 @@ def format_transaction_response(transaction):
     Formats a SQLAlchemy transaction into the desired response.
     Converts transaction_date to a formatted string.
     """
-    transaction_date_str = transaction.transaction_date.strftime(
-        "%Y-%m-%d %H:%M:%S")
     return StockTransactionResponse(
         id=transaction.id,
         ticker_symbol=transaction.ticker_symbol,
         transaction_type=transaction.transaction_type,
         quantity=transaction.quantity,
         price_per_unit=transaction.price_per_unit,
-        transaction_date=transaction_date_str
+        transaction_date=transaction.transaction_date.strftime("%Y-%m-%d")
     )
 
 
@@ -57,17 +55,18 @@ class InvestmentDetailResponse(BaseModel):
         ..., description="Currency of the stock")
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "ticker_symbol": "IVVB11.SA",
-                "dividends_paid": 100.50,
-                "profitability": 0.15,
-                "price_variation": 0.25,
-                "current_price": 150.75,
-                "best_price_to_sold_since_buy": 160.25,
-                "best_price_to_buy_since_buy": 140.50,
-                "average_price_since_buy": 145.75,
-                "average_price_bought": 145.00,
-                "currency": "BRL"
+                "dividends_paid": 0.0,
+                "profitability_total": 0.0,
+                "profitability_stock": 0.0,
+                "price_variation": 0.0,
+                "current_price": 0.0,
+                "best_price_to_sold_since_buy": 0.0,
+                "best_price_to_buy_since_buy": 0.0,
+                "average_price_since_buy": 0.0,
+                "avarage_price_bought": 0.0,
+                "currency": "USD"
             }
         }

@@ -7,13 +7,13 @@ class YahooFinanceService:
         return yf.Ticker(ticker_symbol)
 
     def get_currency_code(self, ticker) -> str:
-        return str(ticker.basic_info.get('currency'))
+        return ticker.basic_info.currency
 
     def get_history(self, ticker, start_date):
         return ticker.history(start=start_date)
 
     def get_current_price(self, ticker) -> Decimal:
-        return Decimal(str(ticker.basic_info.get('last_price')))
+        return Decimal(ticker.basic_info.last_price)
 
     def calculate_dividends_paid(self, quantity: int, history):
         dividends_paid = (history['Dividends'] * quantity).sum()
