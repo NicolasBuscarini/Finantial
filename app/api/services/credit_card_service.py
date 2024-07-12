@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from app.api.models.entities import CreditCard
+from app.infra.entities import CreditCard
 
 
 class CreditCardService:

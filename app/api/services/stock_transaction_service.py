@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app.api.models.requests import StockTransactionRequest
 from app.api.models.responses import StockTransactionResponse, format_transaction_response
-from app.api.models.entities import StockTransaction
+from app.infra.entities import StockTransaction
 
 
 class StockTransactionService:

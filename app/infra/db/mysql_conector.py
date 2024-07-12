@@ -5,7 +5,7 @@ import os
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.sql import text
 from fastapi import HTTPException
-from app.api.models.entities import Base
+from app.infra.entities import Base
 from app.config.logging_config import setup_logging
 
 

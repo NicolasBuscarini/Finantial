@@ -1,9 +1,9 @@
-from sqlalchemy import Column, DateTime, Integer, String, Date, Numeric
+from sqlalchemy import Column, Integer, String, Date, Numeric
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-# This class likely represents a credit card entity that inherits from a base class.
+# Represents a credit card entity.
 
 
 class CreditCard(Base):
@@ -32,10 +32,8 @@ class CreditCard(Base):
     limit = Column(Numeric(10, 2), nullable=False)
     due_date = Column(Date, nullable=False)
 
-# The `StockTransaction` class represents a stock transaction with attributes such as ticker symbol,
-# transaction type (BUY or SELL), quantity, price per unit, and transaction date.
 
-
+# Represents a stock transaction.
 class StockTransaction(Base):
     """
     Represents a stock transaction.

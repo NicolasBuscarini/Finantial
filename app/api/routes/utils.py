@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 import yfinance as yf
 from app.config.logging_config import setup_logging
 from app.infra.db.mysql_conector import create_session
-from app.api.models.entities import StockTransaction
+from app.infra.entities import StockTransaction
 from sqlalchemy.orm import Session
 
 logger = setup_logging()
