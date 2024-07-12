@@ -1,4 +1,6 @@
 {
     "tabby.api.endpoint": "",
-    "python.analysis.typeCheckingMode": "basic"
-}
+    "python.analysis.typeCheckingMode": "basic",
+    "docwriter.style": "Auto-detect",
+    "docwriter.hotkey.windows": "Alt + ."
+}   

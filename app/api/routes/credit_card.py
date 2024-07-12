@@ -1,51 +1,50 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.models import CreditCard
-from app.core.bd import create_session
+from app.infra.db.mysql_conector import get_db
+from app.api.services.credit_card_service import CreditCardService
+from sqlalchemy.exc import SQLAlchemyError
 
 router = APIRouter()
 
 
-# Dependency to get the database session
-def get_db():
-    db = create_session()
-    try:
-        yield db
-    finally:
-        db.close()
-
-@router.post("/credit-card/")
+@router.post("/")
 def create_credit_card(credit_card_data: dict, db: Session = Depends(get_db)):
-    credit_card = CreditCard(**credit_card_data)
-    db.add(credit_card)
-    db.commit()
-    db.refresh(credit_card)
-    return credit_card
+    service = CreditCardService(db)
+    try:
+        return service.create_credit_card(credit_card_data)
+    except SQLAlchemyError as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500, detail="Internal Server Error") from e
 
-@router.get("/credit-card/{credit_card_id}")
+
+@router.get("/{credit_card_id}")
 def read_credit_card(credit_card_id: int, db: Session = Depends(get_db)):
-    credit_card = db.query(CreditCard).filter(CreditCard.id == credit_card_id).first()
-    if credit_card is None:
-        raise HTTPException(status_code=404, detail="Credit card not found")
-    return credit_card
+    service = CreditCardService(db)
+    try:
+        return service.read_credit_card(credit_card_id)
+    except SQLAlchemyError as e:
+        raise HTTPException(
+            status_code=500, detail="Internal Server Error") from e
 
-@router.put("/credit-card/{credit_card_id}")
+
+@router.put("/{credit_card_id}")
 def update_credit_card(credit_card_id: int, credit_card_data: dict, db: Session = Depends(get_db)):
-    credit_card = db.query(CreditCard).filter(CreditCard.id == credit_card_id).first()
-    if credit_card is None:
-        raise HTTPException(status_code=404, detail="Credit card not found")
-    for key, value in credit_card_data.items():
-        setattr(credit_card, key, value)
-    db.commit()
-    db.refresh(credit_card)
-    return credit_card
+    service = CreditCardService(db)
+    try:
+        return service.update_credit_card(credit_card_id, credit_card_data)
+    except SQLAlchemyError as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500, detail="Internal Server Error") from e
 
-@router.delete("/credit-card/{credit_card_id}")
+
+@router.delete("/{credit_card_id}")
 def delete_credit_card(credit_card_id: int, db: Session = Depends(get_db)):
-    credit_card = db.query(CreditCard).filter(CreditCard.id == credit_card_id).first()
-    if credit_card is None:
-        raise HTTPException(status_code=404, detail="Credit card not found")
-    db.delete(credit_card)
-    db.commit()
-    return {"message": "Credit card deleted successfully"}
-
+    service = CreditCardService(db)
+    try:
+        return service.delete_credit_card(credit_card_id)
+    except SQLAlchemyError as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500, detail="Internal Server Error") from e
