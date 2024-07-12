@@ -10,26 +10,23 @@ from logging.handlers import TimedRotatingFileHandler
 class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
     stream: Optional[TextIO] = None
 
-    def __init__(self, filename, when='h', interval=1, backupCount=0,
+    def __init__(self, filename, when='h', interval=1, backupCount=7,
                  encoding=None, delay=False, utc=False, atTime=None):
         super().__init__(filename, when, interval, backupCount, encoding, delay, utc, atTime)
 
     def doRollover(self):
         """
         Do a rollover; in this case, a date/time stamp is appended to the filename
-        when the rollover happens. However, you want the filename to be in the format
-        'app.YYYY-MM-DD.log'.
+        when the rollover happens. The filename format will be 'app.YYYY-MM-DD.log'.
         """
         if self.stream:
             self.stream.close()
             self.stream = None
 
-        # Get the time that this sequence started at and make it a TimeTuple
         current_time = int(time.time())
         t = self.rolloverAt - self.interval
         time_tuple = time.localtime(t)
 
-        # Customizing the rollover filename
         dfn = f"{self.baseFilename}.{time.strftime('%Y-%m-%d', time_tuple)}.log"
 
         if os.path.exists(dfn):
@@ -52,17 +49,17 @@ class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
         self.rolloverAt = int(time.mktime(time_tuple))
 
 
-def setup_logging():
+def setup_logging() -> logging.Logger:
     """
     Configures logging for the application.
     """
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
 
-    # Check if handlers are already added to avoid duplication
     if not logger.handlers:
-        # Handler for info logs to file
         formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+
+        # Handler for info logs to file
         handler = CustomTimedRotatingFileHandler("app.log", when="midnight", backupCount=7)
         handler.setLevel(logging.INFO)
         handler.setFormatter(formatter)
@@ -87,7 +84,7 @@ def setup_logging():
             def format(self, record):
                 levelname = record.levelname
                 if levelname in self.COLORS:
-                    record.levelname = f"{self.COLORS[levelname]}{levelname}:{self.RESET[levelname]}"
+                    record.levelname = f"{self.COLORS[levelname]} {levelname}:{self.RESET[levelname]}"
                 return super().format(record)
 
         console_formatter = ColoredFormatter('%(levelname)s %(message)s')
@@ -97,13 +94,11 @@ def setup_logging():
     return logger
 
 
-logger = setup_logging()
-
-
 async def log_requests(request: Request, call_next):
     """
     Middleware to log information about HTTP requests.
     """
+    logger = logging.getLogger(__name__)
     try:
         logger.info(f"Received request: {request.method} {request.url}")
         logger.info(f"Request headers: {request.headers}")
@@ -149,3 +144,7 @@ async def log_requests(request: Request, call_next):
     except Exception as exc:
         logger.error(f"Exception occurred: {exc}")
         raise exc
+
+
+# Setup logging when this module is imported
+logger = setup_logging()
