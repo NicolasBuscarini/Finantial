@@ -4,26 +4,12 @@ from sqlalchemy.orm import Session
 from app.api.models.requests import StockTransactionRequest
 from app.api.models.responses import StockTransactionResponse
 from app.config.logging_config import setup_logging
-from app.infra.db.mysql_conector import create_session
+from app.infra.db.mysql_conector import get_db
 from app.api.services.stock_transaction_service import StockTransactionService
 
 logger = setup_logging()
 
 router = APIRouter()
-
-# Dependency to get the database session
-
-
-def get_db():
-    """
-    The function `get_db` creates a database session and yields it, ensuring the session is closed after
-    its use.
-    """
-    db = create_session()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.post("/", response_model=List[StockTransactionResponse])
@@ -64,7 +50,8 @@ def read_stock_transaction(stock_transaction_id: int, db: Session = Depends(get_
 def list_stock_transactions(
     db: Session = Depends(get_db),
     page: int = Query(1, description="Page number", gt=0),
-    per_page: int = Query(10, description="Transactions per page", gt=0, le=100),
+    per_page: int = Query(
+        10, description="Transactions per page", gt=0, le=100),
     sort_by: str = Query(
         "transaction_date",
         description="Field to sort by",

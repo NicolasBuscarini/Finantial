@@ -1,10 +1,10 @@
-from fastapi import HTTPException, Request
-from fastapi.responses import StreamingResponse
 import logging
-from logging.handlers import TimedRotatingFileHandler
 import os
 import time
 from typing import Optional, TextIO
+from fastapi import HTTPException, Request
+from fastapi.responses import StreamingResponse
+from logging.handlers import TimedRotatingFileHandler
 
 
 class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
@@ -23,13 +23,14 @@ class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
         if self.stream:
             self.stream.close()
             self.stream = None
-        # get the time that this sequence started at and make it a TimeTuple
-        currentTime = int(time.time())
+
+        # Get the time that this sequence started at and make it a TimeTuple
+        current_time = int(time.time())
         t = self.rolloverAt - self.interval
-        timeTuple = time.localtime(t)
+        time_tuple = time.localtime(t)
 
         # Customizing the rollover filename
-        dfn = f"{self.baseFilename}.{time.strftime('%Y-%m-%d', timeTuple)}.log"
+        dfn = f"{self.baseFilename}.{time.strftime('%Y-%m-%d', time_tuple)}.log"
 
         if os.path.exists(dfn):
             os.remove(dfn)
@@ -39,36 +40,30 @@ class CustomTimedRotatingFileHandler(TimedRotatingFileHandler):
         if not self.delay:
             self.stream = self._open()
 
-        newRolloverAt = self.computeRollover(currentTime)
-        while newRolloverAt <= currentTime:
-            newRolloverAt += self.interval
+        new_rollover_at = self.computeRollover(current_time)
+        while new_rollover_at <= current_time:
+            new_rollover_at += self.interval
 
         if self.utc:
-            timeTuple = time.gmtime(newRolloverAt)
+            time_tuple = time.gmtime(new_rollover_at)
         else:
-            timeTuple = time.localtime(newRolloverAt)
+            time_tuple = time.localtime(new_rollover_at)
 
-        self.rolloverAt = int(time.mktime(timeTuple))
+        self.rolloverAt = int(time.mktime(time_tuple))
 
 
 def setup_logging():
     """
-    The `setup_logging` function configures logging for an application, including writing logs to a file
-    and displaying colored log messages in the console.
-    :return: The `setup_logging()` function returns a configured logger object that has handlers for
-    writing logs to a file and to the console with colored level names.
+    Configures logging for the application.
     """
-    # Main logger configuration
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
 
     # Check if handlers are already added to avoid duplication
     if not logger.handlers:
         # Handler for info logs to file
-        formatter = logging.Formatter(
-            "%(asctime)s - %(levelname)s - %(message)s")
-        handler = CustomTimedRotatingFileHandler(
-            "app.log", when="midnight", backupCount=7)
+        formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+        handler = CustomTimedRotatingFileHandler("app.log", when="midnight", backupCount=7)
         handler.setLevel(logging.INFO)
         handler.setFormatter(formatter)
         logger.addHandler(handler)
@@ -107,9 +102,8 @@ logger = setup_logging()
 
 async def log_requests(request: Request, call_next):
     """
-    Middleware para logar informações sobre as requisições HTTP.
+    Middleware to log information about HTTP requests.
     """
-
     try:
         logger.info(f"Received request: {request.method} {request.url}")
         logger.info(f"Request headers: {request.headers}")

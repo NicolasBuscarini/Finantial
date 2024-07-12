@@ -3,20 +3,12 @@ from fastapi import APIRouter, HTTPException, Depends, Query
 from sqlalchemy.orm import Session
 from app.api.models.responses import InvestmentDetailResponse
 from app.config.logging_config import setup_logging
-from app.infra.db.mysql_conector import create_session
+from app.infra.db.mysql_conector import get_db
 from app.api.services.stock_transaction_service import StockTransactionService
 from app.api.services.yahoo_finance_service import YahooFinanceService
 
 logger = setup_logging()
 router = APIRouter()
-
-
-def get_db():
-    db = create_session()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 def get_investment_details(stock_transaction, yahoo_finance_service):
