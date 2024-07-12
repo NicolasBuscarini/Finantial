@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from app.api.router import api_router
+from app.api.routes.router import api_router
 from app.config.logging_config import log_requests, setup_logging
-from app.config.database_config import setup_database
+from app.infra.db.mysql_conector import setup_database
 
 # Setup logging
 logger = setup_logging()

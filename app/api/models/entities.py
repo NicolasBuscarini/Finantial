@@ -51,4 +51,4 @@ class StockTransaction(Base):
     transaction_type = Column(String(4), nullable=False)  # "BUY" or "SELL"
     quantity = Column(Integer, nullable=False)
     price_per_unit = Column(Numeric(10, 2), nullable=False)
-    transaction_date = Column(DateTime, nullable=False)
+    transaction_date = Column(Date, nullable=False)
